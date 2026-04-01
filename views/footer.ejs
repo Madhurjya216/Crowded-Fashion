@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      :root {
+        --footer-bg: #1a1a1a;
+        --footer-text: #ffffff;
+        --footer-muted: #94a3b8;
+        --footer-accent: #f97316; /* Matches your orange theme */
+      }
+
+      footer {
+        background-color: var(--footer-bg);
+        color: var(--footer-text);
+        padding: 80px 10% 40px 10%;
+        margin-top: 100px;
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1.5fr;
+        gap: 40px;
+        margin-bottom: 60px;
+      }
+
+      .footer-brand h2 {
+        font-family: "Libre Baskerville", serif;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+
+      .footer-brand p {
+        color: var(--footer-muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        max-width: 300px;
+      }
+
+      .footer-heading {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .footer-links {
+        list-style: none;
+        padding: 0;
+      }
+
+      .footer-links li {
+        margin-bottom: 12px;
+      }
+
+      .footer-links a {
+        color: var(--footer-muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
+
+      .footer-links a:hover {
+        color: var(--footer-accent);
+      }
+
+      .newsletter p {
+        color: var(--footer-muted);
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+      }
+
+      .subscribe-form {
+        display: flex;
+        gap: 10px;
+      }
+
+      .subscribe-form input {
+        background: #2d2d2d;
+        border: 1px solid #3d3d3d;
+        padding: 12px 15px;
+        border-radius: 8px;
+        color: white;
+        flex: 1;
+        font-size: 0.9rem;
+      }
+
+      .subscribe-form button {
+        background: var(--footer-accent);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .footer-bottom {
+        padding-top: 30px;
+        border-top: 1px solid #2d2d2d;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--footer-muted);
+        font-size: 0.8rem;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 20px;
+      }
+
+      .social-icons a {
+        color: var(--footer-muted);
+        font-size: 1.2rem;
+        transition: transform 0.3s;
+      }
+
+      .social-icons a:hover {
+        color: white;
+        transform: translateY(-3px);
+      }
+
+      /* Responsive */
+      @media (max-width: 900px) {
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .footer-grid {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .footer-brand p {
+          margin: 0 auto;
+        }
+        .subscribe-form {
+          flex-direction: column;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          gap: 20px;
+        }
+      }
+    </style>
+
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>Crowded Fashion.</h2>
+          <p>
+            Redefining modern essentials with a focus on minimalism, quality
+            materials, and timeless design.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Shop</h4>
+          <ul class="footer-links">
+            <li><a href="/store">New Arrivals</a></li>
+            <li><a href="/store?category=Men">Men</a></li>
+            <li><a href="/store?category=Women">Women</a></li>
+            <li><a href="/store">Accessories</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Support</h4>
+          <ul class="footer-links">
+            <li><a href="/orders">Track Order</a></li>
+            <li><a href="#">Shipping Policy</a></li>
+            <li><a href="#">Returns & Exchanges</a></li>
+            <li><a href="/contact">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div class="newsletter">
+          <h4 class="footer-heading">Newsletter</h4>
+          <p>Subscribe to receive updates and exclusive offers.</p>
+          <form class="subscribe-form">
+            <input type="email" placeholder="Your email address" required />
+            <button type="submit">Join</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2024 Crowded Fashion. All rights reserved.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

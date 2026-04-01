@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f5f4f0;
+      --surface:   #eceae4;
+      --card:      #ffffff;
+      --border:    #e0ddd6;
+      --accent:    #2563eb;
+      --accent-dim:#1d4ed8;
+      --text:      #1a1a2e;
+      --muted:     #6b7280;
+      --danger:    #dc2626;
+      --radius:    14px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* ── NAV BAR ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(245,244,240,.92);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--accent);
+      letter-spacing: .02em;
+      text-decoration: none;
+    }
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .875rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--accent); }
+    .nav-back svg { width:16px; height:16px; }
+
+    /* ── PAGE SHELL ── */
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    .page-header {
+      margin-bottom: 2.5rem;
+    }
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -.02em;
+    }
+    .page-header h1 span { color: var(--accent); }
+    .item-count {
+      display: inline-block;
+      margin-top: .4rem;
+      font-size: .85rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+
+    /* ── LAYOUT ── */
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 800px) {
+      .cart-layout { grid-template-columns: 1fr; }
+    }
+
+    /* ── ITEM LIST ── */
+    .cart-items { display: flex; flex-direction: column; gap: 1rem; }
+
+    .cart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      transition: border-color .2s, transform .2s;
+      animation: slideIn .35s ease both;
+    }
+    .cart-card:hover {
+      border-color: var(--accent-dim);
+      transform: translateY(-2px);
+    }
+
+    @keyframes slideIn {
+      from { opacity:0; transform: translateY(14px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    .cart-card:nth-child(1) { animation-delay: .05s }
+    .cart-card:nth-child(2) { animation-delay: .10s }
+    .cart-card:nth-child(3) { animation-delay: .15s }
+    .cart-card:nth-child(4) { animation-delay: .20s }
+    .cart-card:nth-child(5) { animation-delay: .25s }
+
+    .item-img-wrap {
+      width: 90px;
+      height: 90px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--surface);
+    }
+    .item-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .item-info { flex: 1; min-width: 0; }
+    .item-name {
+      font-size: 1rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: .3rem;
+    }
+    .item-meta {
+      font-size: .8rem;
+      color: var(--muted);
+    }
+    .item-qty-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: .2rem .7rem;
+      font-size: .8rem;
+      margin-top: .5rem;
+      color: var(--text);
+    }
+    .item-qty-badge strong { color: var(--accent); }
+
+    .item-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: .75rem;
+      flex-shrink: 0;
+    }
+    .item-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .btn-remove {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .78rem;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: .35rem .75rem;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .btn-remove:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+      background: rgba(224,87,87,.07);
+    }
+    .btn-remove svg { width:13px; height:13px; flex-shrink:0; }
+
+    /* ── SUMMARY PANEL ── */
+    .summary-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      position: sticky;
+      top: 80px;
+      animation: slideIn .4s .1s ease both;
+    }
+    .summary-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .9rem;
+      margin-bottom: .85rem;
+    }
+    .summary-row .label { color: var(--muted); }
+    .summary-row .value { font-weight: 500; }
+    .summary-row.free .value { color: #16a34a; font-size: .82rem; }
+
+    .summary-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.1rem 0;
+    }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .summary-total .t-label {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .summary-total .t-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--accent);
+    }
+
+    .btn-checkout {
+      width: 100%;
+      padding: .95rem;
+      background: var(--accent);
+      color: #ffffff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      letter-spacing: .04em;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn-checkout:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-checkout:active { transform: translateY(0); }
+
+    .secure-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      margin-top: .85rem;
+      font-size: .75rem;
+      color: var(--muted);
+    }
+    .secure-note svg { width:13px; height:13px; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 5rem 2rem;
+      animation: slideIn .4s ease both;
+    }
+    .empty-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .empty-icon svg { width:36px; height:36px; color: var(--muted); }
+    .empty-state h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: .6rem;
+    }
+    .empty-state p { color: var(--muted); margin-bottom: 2rem; font-size: .95rem; }
+
+    .btn-shop {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--accent);
+      color: #ffffff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      text-decoration: none;
+      padding: .85rem 2rem;
+      border-radius: 10px;
+      letter-spacing: .04em;
+      transition: opacity .2s;
+    }
+    .btn-shop:hover { opacity: .85; }
+    .btn-shop svg { width:16px; height:16px; }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="/store" class="nav-brand">Crowded Fashion</a>
+  <a href="/store" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Continue Shopping
+  </a>
+</nav>
+
+<!-- ── PAGE ── -->
+<div class="page">
+
+  <div class="page-header">
+    <h1>Your <span>Cart</span></h1>
+    <% if (cart.items.length > 0) { %>
+      <span class="item-count"><%= cart.items.length %> item<%= cart.items.length !== 1 ? 's' : '' %> in your bag</span>
+    <% } %>
+  </div>
+
+  <% if (cart.items.length === 0) { %>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+      </div>
+      <h2>Nothing here yet</h2>
+      <p>Looks like you haven't added anything to your cart.</p>
+      <a href="/store" class="btn-shop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+        Browse the Store
+      </a>
+    </div>
+
+  <% } else { %>
+
+    <% let total = 0; %>
+    <% cart.items.forEach(item => { total += item.price * item.quantity; }) %>
+
+    <div class="cart-layout">
+
+      <!-- ITEMS -->
+      <div class="cart-items">
+        <% cart.items.forEach(item => { %>
+          <div class="cart-card">
+
+            <div class="item-img-wrap">
+              <img src="<%= item.image %>" alt="<%= item.name %>">
+            </div>
+
+            <div class="item-info">
+              <div class="item-name"><%= item.name %></div>
+              <div class="item-meta">Unit price: ₹<%= item.price.toLocaleString('en-IN') %></div>
+              <div class="item-qty-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg>
+                Qty: <strong><%= item.quantity %></strong>
+              </div>
+            </div>
+
+            <div class="item-right">
+              <div class="item-price">₹<%= (item.price * item.quantity).toLocaleString('en-IN') %></div>
+
+              <form action="/cart/remove/<%= item.productId %>" method="POST">
+                <button class="btn-remove" type="submit">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                  Remove
+                </button>
+              </form>
+            </div>
+
+          </div>
+        <% }) %>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="summary-panel">
+        <div class="summary-title">Order Summary</div>
+
+        <div class="summary-row">
+          <span class="label">Subtotal (<%= cart.items.length %> items)</span>
+          <span class="value">₹<%= total.toLocaleString('en-IN') %></span>
+        </div>
+        <div class="summary-row free">
+          <span class="label">Delivery</span>
+          <span class="value">✓ Free</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">Taxes</span>
+          <span class="value">Calculated at checkout</span>
+        </div>
+
+        <hr class="summary-divider">
+
+        <div class="summary-total">
+          <span class="t-label">Total</span>
+          <span class="t-value">₹<%= total.toLocaleString('en-IN') %></span>
+        </div>
+
+        <a href="/checkout"><button class="btn-checkout">Proceed to Checkout →</button></a>
+
+        <div class="secure-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Secure &amp; encrypted checkout
+        </div>
+      </div>
+
+    </div>
+
+  <% } %>
+</div>
+
+
+
+<%- include('footer') %>
+</body>
+</html>

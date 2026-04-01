@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Crowded Fashion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg-color: #fcfcf9;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --accent: #f97316;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- Nav Bar --- */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 2.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            font-family: "Libre Baskerville", serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        /* --- Layout --- */
+        .checkout-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 40px;
+        }
+
+        h2 {
+            font-family: "Libre Baskerville", serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* --- Form Section --- */
+        .form-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--text-main);
+        }
+
+        /* --- Summary Section --- */
+        .summary-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .item-info p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .item-qty {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            background: var(--text-main);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .place-order-btn:hover {
+            background: #000;
+            transform: translateY(-2px);
+        }
+
+        .place-order-btn:active {
+            transform: translateY(0);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 850px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+            .summary-card {
+                position: static;
+                order: -1; /* Summary shows first on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/store" class="nav-brand">Crowded Fashion</a>
+        <a href="/cart" style="text-decoration: none; color: var(--text-muted); font-size: 0.9rem;">Return to Cart</a>
+    </nav>
+
+    <div class="checkout-container">
+        <div class="form-section">
+            <h2>Checkout</h2>
+            <div class="form-card">
+                <span class="section-title">Shipping Address</span>
+                <form method="POST" action="/checkout">
+                    <textarea name="address" placeholder="Flat No, Building Name, Street, City, Pincode..." required></textarea>
+                    <button type="submit" class="place-order-btn">Place Order</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <div class="summary-card">
+                <span class="section-title">Order Summary</span>
+                
+                <% cart.items.forEach(item => { %>
+                <div class="item-row">
+                    <div class="item-info">
+                        <p><strong><%= item.name %></strong></p>
+                        <span class="item-qty">Quantity: <%= item.quantity %></span>
+                    </div>
+                    <div class="item-price">
+                        ₹<%= item.price * item.quantity %>
+                    </div>
+                </div>
+                <% }) %>
+
+                <div class="total-row">
+                    <span>Total</span>
+                    <span>₹<%= total %></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+  const btn = document.querySelector(".place-order-btn");
+
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    const address = document.querySelector("textarea").value;
+
+    if (!address) {
+      alert("Enter address");
+      return;
+    }
+
+    // Step 1: Create order from backend
+    const res = await fetch("/create-order", {
+      method: "POST",
+    });
+
+    const data = await res.json();
+
+    const options = {
+      key: data.key,
+      amount: data.amount * 100,
+      currency: "INR",
+      name: "Crowded Fashion",
+      description: "Test Payment",
+      order_id: data.orderId,
+
+      handler: async function (response) {
+        // Step 2: Verify payment
+        const verifyRes = await fetch("/verify-payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...response,
+            address,
+          }),
+        });
+
+        const result = await verifyRes.json();
+
+        if (result.success) {
+          window.location.href = "/orders";
+        } else {
+          alert("Payment failed");
+        }
+      },
+
+      theme: {
+        color: "#000",
+      },
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+  });
+</script>
+
+
+<%- include('footer') %>
+</body>
+</html>

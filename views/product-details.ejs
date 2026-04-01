@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= product.name %> | Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Libre+Baskerville:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-color: #ffffff;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --accent-orange: #f97316;
+        --border-color: #f1f5f9;
+      }
+
+      /* ── NAV BAR ── */
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 2.5rem;
+        background: rgba(245, 244, 240, 0.95);
+        backdrop-filter: blur(12px);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 40px;
+      }
+
+      /* Hide Hamburger on Desktop */
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-main);
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        border-radius: 8px;
+        outline: none;
+        -webkit-tap-highlight-color: transparent; /* Removes blue flash on mobile tap */
+      }
+
+      .menu-toggle:hover {
+        background: rgba(0, 0, 0, 0.05); /* Visual feedback when hovering */
+      }
+
+      .menu-toggle svg {
+        width: 28px;
+        height: 28px;
+        pointer-events: none; /* Ensures the click registers on the button, not the path */
+      }
+      .nav-brand {
+        font-family: "Playfair Display", serif;
+        font-size: 1.4rem;
+        color: var(--accent);
+        letter-spacing: 0.02em;
+        text-decoration: none;
+      }
+
+      .nav-brand-child{
+        font: 18px;
+        text-decoration: none;;
+        font-family: "Nunito", sans-serif;
+        transition: .2s ease;
+    }
+
+    .nav-brand-child:hover{
+        color: orangered
+    }
+
+      .nav-back {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .nav-back:hover {
+        color: var(--accent);
+      }
+      .nav-back svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        margin: 0;
+        padding: 40px;
+        line-height: 1.6;
+        background-color: #f5f5f1;
+      }
+
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: var(--text-muted);
+        font-weight: 500;
+        margin-bottom: 40px;
+        transition: color 0.2s;
+      }
+
+      .back-btn:hover {
+        color: var(--text-main);
+      }
+
+      .container {
+        display: flex;
+        gap: 60px;
+        max-width: 1100px;
+        margin: 0 auto;
+        align-items: flex-start;
+        padding-top: 100px;
+      }
+
+      .image-section {
+        flex: 1.2;
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+        max-height: 650px;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      }
+
+      .details {
+        flex: 1;
+        position: sticky;
+        top: 40px;
+      }
+
+      .category-label {
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--accent-orange);
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      h1 {
+        margin: 0 0 15px 0;
+        font-family: "Libre Baskerville", serif;
+        font-size: 2.5rem;
+        color: #0f172a;
+      }
+
+      .price {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 20px 0;
+      }
+
+      .description {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        margin-bottom: 30px;
+      }
+
+      .action-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 40px;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 16px 28px;
+        border: none;
+        cursor: pointer;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1rem;
+        transition:
+          transform 0.2s,
+          background 0.2s;
+        text-align: center;
+      }
+
+      .btn:active {
+        transform: scale(0.98);
+      }
+
+      .cart {
+        background: #fff;
+        color: var(--text-main);
+        border: 2px solid var(--text-main);
+      }
+
+      .cart:hover {
+        background: #f8fafc;
+      }
+
+      .buy {
+        background: var(--text-main);
+        color: white;
+      }
+
+      .buy:hover {
+        background: #000;
+      }
+
+      .hr {
+        color: red;
+      }
+
+      /* Mobile responsiveness */
+      @media (max-width: 850px) {
+        .container {
+          flex-direction: column;
+        }
+        .image-section,
+        .details {
+          flex: none;
+          width: 100%;
+        }
+      } 
+
+      /* --- Responsive Menu (Trigger at 550px) --- */
+      @media (max-width: 550px) {
+        nav {
+          padding: 1rem 1.5rem;
+        }
+
+        @media (max-width: 550px) {
+          .menu-toggle {
+            display: flex; /* Now it only appears on small screens */
+          }
+
+          .nav-links {
+            display: none; /* Hide standard links */
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(245, 244, 240, 0.98);
+            padding: 20px 0;
+            text-align: center;
+            gap: 20px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          }
+
+          .nav-links.active {
+            display: flex; /* Show links when toggled */
+          }
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/store" class="nav-brand">Crowded Fashion</a>
+
+      <button
+        class="menu-toggle"
+        id="menu-toggle"
+        aria-label="Toggle navigation"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="nav-links" id="nav-links">
+        <a href="/home" class="nav-brand-child">Home</a>
+        <a href="/cart" class="nav-brand-child">Cart</a>
+      </div>
+    </nav>
+
+    <hr class="hr" />
+
+    <div class="container">
+      <div class="image-section">
+        <img src="<%= product.image %>" alt="<%= product.name %>" />
+      </div>
+
+      <div class="details">
+        <span class="category-label">Premium Collection</span>
+        <h1><%= product.name %></h1>
+
+        <div class="price">₹<%= product.price %></div>
+
+        <p class="description"><%= product.description %></p>
+
+        <div class="action-group">
+          <button class="btn cart" onclick="addToCart('<%= product.id %>')">
+            Add to Cart
+          </button>
+          <a href="/checkout"><button class="btn buy">Buy Now</button></a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function addToCart(id) {
+        try {
+          const res = await fetch(`/cart/add/${id}`, {
+            method: "POST",
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            alert("Added to cart successfully!");
+          } else {
+            alert("Could not add to cart");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Network error");
+        }
+      }
+
+      const menuToggle = document.getElementById("menu-toggle");
+      const navLinks = document.getElementById("nav-links");
+
+      menuToggle.addEventListener("click", () => {
+        // This toggles the 'active' class which controls visibility in CSS
+        navLinks.classList.toggle("active");
+
+        // Optional: Change hamburger icon to an 'X' when open
+        const isOpened = navLinks.classList.contains("active");
+        menuToggle.innerHTML = isOpened
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+          navLinks.classList.remove("active");
+        }
+      });
+    </script>
+
+
+<%- include('footer') %>
+  </body>
+</html>
