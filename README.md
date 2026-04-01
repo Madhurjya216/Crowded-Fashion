@@ -1,4 +1,4 @@
-🛒 Crowded Fashion – Full Stack E-commerce App
+<h1>🛒 Crowded Fashion – Full Stack E-commerce App</h1>
 
 A full-stack e-commerce web application built using Node.js, Express, MongoDB, Passport.js, and Razorpay (Test Mode).
 
@@ -129,6 +129,3 @@ UI upgrade with React / Next.js
 
 🤝 Contributing
 Pull requests are welcome. For major changes, open an issue first to discuss your approach.
-
-📄 License
-This project is open-source and available under the MIT License.
