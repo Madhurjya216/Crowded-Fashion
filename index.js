@@ -24,12 +24,14 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 // Set EJS as the view engine
 app.set("view engine", "ejs");
 
+app.set("trust proxy", 1); // 1. Trust Render's proxy
+
 // Serve static files with caching
 app.use(
   express.static(path.join(__dirname, "public"), {
     maxAge: "1d",
     etag: true,
-  })
+  }),
 );
 
 // Connect to MongoDB
@@ -57,12 +59,11 @@ app.use(
     cookie: {
       maxAge: 2 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: false, // Set to false temporarily to test
       sameSite: "lax",
     },
-  })
+  }),
 );
-
 
 // CRITICAL: Passport initialization MUST come after session
 app.use(passport.initialize());
@@ -81,7 +82,7 @@ app.use((req, res, next) => {
 // AJAX upload progress endpoint
 app.post("/api/upload-progress", (req, res) => {
   res.json({ status: "received" });
-}); 
+});
 
 // CRITICAL: Routes MUST come after all middleware
 app.use("/", indexRoute);
