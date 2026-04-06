@@ -2,8 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const { registerUser, generateAndSendOTP } = require("../config/passport");
-const { isAuthenticated } = require("../config/passport");
+const { registerUser, generateAndSendOTP, isAuthenticated } = require("../config/passport");
 const products = require("../data/products");
 const Cart = require("../models/cart");
 const Order = require("../models/order");
@@ -15,32 +14,19 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Login form page
 router.get("/login", (req, res) => {
-  // If already logged in, redirect to dashboard
-  if (req.isAuthenticated()) {
-    return res.redirect("/home");
-  }
+  if (req.isAuthenticated()) return res.redirect("/home");
   res.render("login", { error: null });
 });
 
-// Register form page
 router.get("/", (req, res) => {
-  // If already logged in, redirect to dashboard
-  if (req.isAuthenticated()) {
-    return res.redirect("/home");
-  }
+  if (req.isAuthenticated()) return res.redirect("/home");
   res.render("register", { error: null });
 });
 
-router.get("/home", (req, res) => {
-  return res.render("home", { user: req.user });
-});
+router.get("/home", (req, res) => res.render("home", { user: req.user }));
 
-// contact page
-router.get("/contact", (req, res) => {
-  return res.render("contact", { user: req.user });
-});
+router.get("/contact", (req, res) => res.render("contact", { user: req.user }));
 
 // Handle user registration
 router.post("/", async (req, res) => {
@@ -69,7 +55,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Handle login - FIXED VERSION
+// Handle login
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
@@ -121,11 +107,8 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-// OTP verification page
 router.get("/verify-otp", (req, res) => {
-  if (!req.session.email) {
-    return res.redirect("/login");
-  }
+  if (!req.session.email) return res.redirect("/login");
   res.render("verify-otp", { email: req.session.email, error: null });
 });
 
@@ -170,7 +153,6 @@ router.post("/verify-otp", (req, res, next) => {
   })(req, res, next);
 });
 
-// Resend OTP
 router.post("/resend-otp", async (req, res, next) => {
   if (!req.session.email) {
     return res.redirect("/login");
@@ -188,8 +170,7 @@ router.post("/resend-otp", async (req, res, next) => {
   }
 });
 
-// Product Page
-// STORE HOME (E-COMMERCE PAGE)
+// Store routes
 router.get("/store", isAuthenticated, (req, res) => {
   const { category } = req.query;
 
@@ -208,7 +189,6 @@ router.get("/store", isAuthenticated, (req, res) => {
   });
 });
 
-// PRODUCT DETAILS PAGE
 router.get("/store/:id", (req, res) => {
   const productId = parseInt(req.params.id);
 
@@ -225,7 +205,6 @@ router.get("/store/:id", (req, res) => {
 });
 
 
-// Add to Cart Route
 router.post("/cart/add/:id", isAuthenticated, async (req, res) => {
   try {
     const productId = parseInt(req.params.id);
@@ -266,7 +245,6 @@ router.post("/cart/add/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-// Displaying cart
 router.get("/cart", isAuthenticated, async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id });
 
@@ -275,7 +253,6 @@ router.get("/cart", isAuthenticated, async (req, res) => {
   });
 });
 
-// remove from cart
 router.post("/cart/remove/:id", isAuthenticated, async (req, res) => {
   const productId = parseInt(req.params.id);
 
@@ -291,7 +268,7 @@ router.post("/cart/remove/:id", isAuthenticated, async (req, res) => {
 });
 
 
-// checkout code
+// Checkout routes
 router.get("/checkout", isAuthenticated, async (req, res) => {
   const cart = await Cart.findOne({ user: req.user._id });
 
@@ -310,9 +287,6 @@ router.get("/checkout", isAuthenticated, async (req, res) => {
   });
 });
 
-
-
-//  checkout post code
 router.post("/create-order", isAuthenticated, async (req, res) => {
   try {
     const cart = await Cart.findOne({ user: req.user._id });
@@ -348,7 +322,6 @@ router.post("/create-order", isAuthenticated, async (req, res) => {
 
 router.get("/orders", isAuthenticated, async (req, res) => {
   const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
-
   res.render("orders", { orders });
 });
 
@@ -402,14 +375,11 @@ router.post("/verify-payment", isAuthenticated, async (req, res) => {
   }
 });
 
-// Logout Route
 router.get("/logout", (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
     req.session.destroy((err) => {
-      if (err) {
-        console.error("Session destroy error:", err);
-      }
+      if (err) console.error("Session destroy error:", err);
       res.redirect("/login");
     });
   });

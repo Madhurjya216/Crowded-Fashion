@@ -69,20 +69,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Debug middleware - helps identify issues
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
-  console.log("Authenticated:", req.isAuthenticated());
-  console.log("User:", req.user ? req.user.email : "Not logged in");
-  console.log("Session ID:", req.sessionID);
-  console.log("---");
-  next();
-});
-
-// AJAX upload progress endpoint
-app.post("/api/upload-progress", (req, res) => {
-  res.json({ status: "received" });
-});
+// (Clean) -- request debug logging and unused endpoints removed
 
 // CRITICAL: Routes MUST come after all middleware
 app.use("/", indexRoute);
