@@ -114,8 +114,6 @@ router.post("/login", (req, res, next) => {
         }
 
         console.log("✅ Login successful, redirecting to dashboard");
-        console.log("User ID:", user._id);
-        console.log("Session ID:", req.sessionID);
 
         return res.redirect("/home");
       });

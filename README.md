@@ -75,9 +75,12 @@ project-root/
 ⚙️ Installation & Setup
 1. Clone the repository
 git clone https://github.com/Madhurjya216/crowded-fashion.git
+
 cd crowded-fashion
+
 2. Install dependencies
 npm install
+
 3. Setup environment variables
 
 Create a .env file:
@@ -91,7 +94,7 @@ RAZORPAY_KEY_SECRET=your_key_secret
 npm start
 
 Server runs on:
-http://localhost:3000
+http://localhost:5000
 
 🔄 Application Flow
 User registers → OTP verification

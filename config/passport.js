@@ -7,20 +7,17 @@ const nodemailer = require("nodemailer");
 
 // CRITICAL: Serialize user - saves user ID to session
 passport.serializeUser((user, done) => {
-  console.log("✅ Serializing user:", user._id);
   done(null, user._id);
 });
 
 // CRITICAL: Deserialize user - retrieves user from database
 passport.deserializeUser(async (id, done) => {
   try {
-    console.log("🔍 Deserializing user ID:", id);
     const user = await User.findById(id);
     if (!user) {
       console.log("❌ User not found during deserialization");
       return done(null, false);
     }
-    console.log("✅ User deserialized:", user.email);
     done(null, user);
   } catch (error) {
     console.error("❌ Deserialization error:", error);
